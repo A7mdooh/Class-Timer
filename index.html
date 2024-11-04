@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عرض الأحداث حسب اليوم</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="header">
+        <img src="logo.png" alt="شعار المدرسة" class="logo">
+        <div class="school-info">
+            <h1 id="school-name">اسم المدرسة</h1>
+            <h2>ساعة المدرسة</h2>
+            <div id="clock" class="clock">00:00:00 AM</div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <label for="day-select">اختر يومًا من الأسبوع:</label>
+        <select id="day-select">
+            <option>الأحد</option>
+            <option>الإثنين</option>
+            <option>الثلاثاء</option>
+            <option>الأربعاء</option>
+            <option>الخميس</option>
+            <option>الجمعة</option>
+            <option>السبت</option>
+        </select>
+
+        <table id="events-table">
+            <thead>
+                <tr>
+                    <th>الحدث</th>
+                    <th>وقت البداية</th>
+                    <th>وقت النهاية</th>
+                    <th>المعلم</th>
+                    <th>الصف</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td colspan="5">لا توجد أحداث بالوقت الحالي</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="footer">
+        <div id="manager-info">
+            <span>مدير المدرسة: <span id="manager-name">اسم المدير</span></span>
+            <span>المدير المساعد: <span id="assistant-manager-name">اسم المدير المساعد</span></span>
+        </div>
+        <button id="exit-button">إنهاء</button>
+    </div>
+
+    <!-- اسم المبرمج في أسفل الصفحة -->
+    <div class="designer-credit">برمجة وتصميم: أ / أحمد بن عبدالله الضامري</div>
+
+    <script src="schoolData.js"></script>
+	<script src="eventsData.js"></script>
+	<script src="script.js"></script>
+	<script src="main.js"></script>
+
+
+</body>
+</html>
