@@ -1,3 +1,7 @@
+// إعداد الصوت لبداية ونهاية الحدث
+let startSound = new Audio('start_sound.mp3');
+let endSound = new Audio('end_sound.mp3');
+
 // تحديث الساعة الرقمية بالتنسيق 12 ساعة
 function updateClock() {
     const now = new Date();
@@ -18,36 +22,40 @@ function loadSchoolInfo() {
     document.getElementById("assistant-manager-name").textContent = schoolData.assistantManagerName;
 }
 
-// تحميل بيانات الأحداث من eventsData.js
-function loadEvents() {
-    const selectedDay = document.getElementById("day-select").value;
-    const matchingEvents = eventsData.filter(event => event.day === selectedDay);
-    updateEventsTable(matchingEvents);
-}
+// تحديث الأحداث بناءً على اليوم والوقت الحالي
+function loadCurrentEvents() {
+    const now = new Date();
+    const currentDay = ["الأحد", "الإثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"][now.getDay()];
+    const currentTime = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
 
-
-
-// تحميل الأحداث بناءً على اليوم المحدد من قائمة الأيام
-function loadEvents() {
-    const selectedDay = document.getElementById("day-select").value;
-    // ملاحظة: يجب تضمين مكتبة JavaScript مثل SheetJS لقراءة ملفات Excel في المتصفح مباشرة
-
-    fetch("events.xlsx").then(response => {
-        // هنا يجب عليك معالجة البيانات باستخدام مكتبة Excel لتحليل الأحداث في يوم معين
-        // مثال على حدث ثابت للتوضيح
-        const exampleEvents = [
-            { name: "حصة رياضيات", start: "09:00 AM", end: "10:00 AM", teacher: "الأستاذ علي", class: "الصف الخامس" },
-            { name: "حصة علوم", start: "10:15 AM", end: "11:15 AM", teacher: "الأستاذة فاطمة", class: "الصف السادس" }
-        ];
-
-        updateEventsTable(exampleEvents);
-    }).catch(error => {
-        console.error("خطأ في تحميل ملف الأحداث:", error);
-        updateEventsTable([]);
+    const matchingEvents = eventsData.filter(event => {
+        return event.day === currentDay && currentTime >= event.start && currentTime < event.end;
     });
+
+    updateEventsTable(matchingEvents);
+
+    if (matchingEvents.length > 0) {
+        playStartSound();
+        const eventEndTime = new Date(`${now.toDateString()} ${matchingEvents[0].end}`);
+        const timeUntilEnd = eventEndTime - now;
+        setTimeout(() => {
+            playEndSound();
+            loadCurrentEvents(); // تحميل الحدث التالي بعد انتهاء الحالي
+        }, timeUntilEnd);
+    }
 }
 
-// تحديث الجدول بالأحداث المستوردة
+// تشغيل الصوت لبداية الحدث
+function playStartSound() {
+    startSound.play();
+}
+
+// تشغيل الصوت لنهاية الحدث
+function playEndSound() {
+    endSound.play();
+}
+
+// تحديث الجدول بالأحداث الحالية
 function updateEventsTable(events) {
     const tableBody = document.querySelector("#events-table tbody");
     tableBody.innerHTML = "";
@@ -75,7 +83,6 @@ function updateEventsTable(events) {
 document.addEventListener("DOMContentLoaded", () => {
     updateClock();          // تشغيل الساعة الرقمية
     loadSchoolInfo();       // تحميل بيانات المدرسة
-    loadEvents();           // تحميل الأحداث
-    document.getElementById("day-select").addEventListener("change", loadEvents); // تحديث الأحداث عند تغيير اليوم
-    document.getElementById("exit-button").addEventListener("click", () => window.close()); // زر إنهاء التطبيق
+    loadCurrentEvents();    // تحميل الأحداث الحالية
+    setInterval(loadCurrentEvents, 60000); // تحديث الأحداث كل دقيقة
 });
