@@ -33,11 +33,39 @@ function parseTimeString(timeStr) {
     return now;
 }
 
+// إنشاء حدث تجريبي لمدة دقيقة واحدة
+function createTestEvent() {
+    const now = new Date();
+    const startHours = String(now.getHours() % 12 || 12).padStart(2, '0');
+    const startMinutes = String(now.getMinutes()).padStart(2, '0');
+    const startAmPm = now.getHours() >= 12 ? 'PM' : 'AM';
+    const startTime = `${startHours}:${startMinutes} ${startAmPm}`;
+    
+    const end = new Date(now.getTime() + 1 * 60 * 1000); // إضافة دقيقة واحدة
+    const endHours = String(end.getHours() % 12 || 12).padStart(2, '0');
+    const endMinutes = String(end.getMinutes()).padStart(2, '0');
+    const endAmPm = end.getHours() >= 12 ? 'PM' : 'AM';
+    const endTime = `${endHours}:${endMinutes} ${endAmPm}`;
+
+    return {
+        day: ["الأحد", "الإثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"][now.getDay()],
+        name: "حدث تجريبي",
+        start: startTime,
+        end: endTime,
+        teacher: "الأستاذ تجريبي",
+        class: "الصف التجريبي"
+    };
+}
+
 // تحميل وعرض الأحداث المتوافقة مع اليوم والوقت الحالي
 function loadCurrentEvents() {
+    // إضافة الحدث التجريبي
+    const testEvent = createTestEvent();
+    eventsData.push(testEvent);
+
     const now = new Date();
     const currentDay = ["الأحد", "الإثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"][now.getDay()];
-    
+
     const matchingEvents = eventsData.filter(event => {
         return event.day === currentDay &&
                now >= parseTimeString(event.start) &&
@@ -53,7 +81,8 @@ function loadCurrentEvents() {
         
         setTimeout(() => {
             playEndSound();
-            loadCurrentEvents(); // تحميل الحدث التالي بعد انتهاء الحالي
+            eventsData.pop(); // إزالة الحدث التجريبي بعد انتهائه
+            loadCurrentEvents(); // تحميل الأحداث مرة أخرى بعد انتهاء الحدث التجريبي
         }, timeUntilEnd);
     }
 }
