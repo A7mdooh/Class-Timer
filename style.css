@@ -18,9 +18,10 @@ body {
 .header {
     background-color: #4CAF50;
     display: flex;
-    flex-direction: column; /* لجعل المحتوى عمودي */
-    align-items: center;    /* توسيط المحتوى أفقياً */
-    padding: 5px;           /* تقليل حجم الشريط */
+    align-items: center;
+    justify-content: center;  /* توسيط المحتوى أفقياً */
+    flex-direction: column;    /* توسيط العناصر عمودياً */
+    padding: 5px;              /* تقليل حجم الشريط */
     color: white;
 }
 
@@ -29,16 +30,21 @@ body {
     margin-bottom: 5px;
 }
 
+.school-info {
+    text-align: center; /* توسيط النصوص داخل school-info */
+}
+
 .school-info h1 {
     font-size: 20px; /* تقليل حجم الخط لاسم المدرسة */
     color: #ffffff;
-    margin: 0;
+    margin: 5px 0;
     font-weight: bold;
 }
 
 .clock {
     font-size: 18px; /* تقليل حجم الخط للساعة */
     color: #FFD700;
+    margin-top: 5px;
 }
 
 .main-content {
@@ -87,6 +93,7 @@ body {
     padding: 10px;
     background-color: #e0e0e0;
 }
+
 
 * {
     margin: 0;
